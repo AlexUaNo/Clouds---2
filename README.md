@@ -18,62 +18,110 @@ Installation: No installation is required, except of Python 3.x.
 
 ## Variables
 Below are represented variables, which play crucial roles in various aspects of running the code, including network communication, file transfer, and synchronization between threads.
+
 `DEFAULT_TIMEOUT`: Timeout duration in seconds for socket operations.
+
 `WINDOW_SIZE`: Fixed window size for Go-Back-N protocol.
+
 `CHUNK_SIZE`: Size of data chunks read from the file.
+
 `HEADER_FORMAT`: Format string for packing/unpacking packet headers.
+
 `FIN_FLAG`, `ACK_FLAG`, `SYN_FLAG`, `RES_FLAG`: Flag masks for packet flags.
+
 `transfer_lock`: Thread lock for file transfer synchronization.
+
 `logInQ`: Queue for logging messages.
+
 `logLock`: Thread lock for accessing the logging queue.
+
 `threads`: List to store references to active threads.
+
 `server_socket`: Socket object for the server-side communication.
+
 `discard`: Variable to discard a specific packet on the server-side.
+
 `syn_packet`: Received SYN packet from the client.
+
 `syn_header`: Parsed header of the received SYN packet.
+
 `ack_packet`: ACK packet sent by the server.
+
 `ack_header`: Parsed header of the received ACK packet.
+
 `file`: File object for reading/writing data.
+
 `start_time`: Start time of file transfer.
+
 `received_data`: Total size of received data.
+
 `seq_num`: Sequence number for packet ordering.
+
 `previousSeqNumber`: Sequence number of the previously received packet.
 
 ## Functions
 The core logic and operations of the DRTP/UDP file sender application are encapsulated in the following functions.
+
 `create_packet(seq, ack, flags, data)`: Creates a packet with specified sequence number, acknowledgment number, flags, and data.
+
 `parse_header(header)`: Parses the header of a packet and returns the sequence number, acknowledgment number, and flags.
+
 `send_ack(client_socket, server_ip, server_port, seq_num, ack_num, flags)`: Sends an acknowledgment packet with specified sequence number, acknowledgment number, and flags.
+
 `GetChunk(file, pos, maxSize)`: Reads a chunk of data from the file starting from the specified position.
+
 `GetTotalSize(filename)`: Returns the total size of the file specified by the filename.
+
 `GetTotalChunks(fileSize, maxSize)`: Calculates the total number of chunks required to transfer a file of the given size with the specified maximum chunk size.
+
 `send_file(filename, server_ip, server_port, windowSize)`: Establishes a connection with the server and sends the specified file using the Go-Back-N protocol.
+
 `pack_header(seq_num, ack_num, flags)`: Packs the sequence number, acknowledgment number, and flags into a header for packet transmission.
+
 `send_ack_server(server_socket, client_address, seq_num, ack_num, flags)`: Sends an acknowledgment packet from the server to the client with specified sequence number, acknowledgment number, and flags.
+
 `IsNotRaisedPacket(prevSeqNumber, currSeqNumber)`: Checks if the current packet's sequence number is the expected next sequence number.
+
 `MakeFile(filename)`: Creates or clears the contents of a file with the specified filename.
+
 `receive_file(filename, port, discard)`: Listens for incoming connections, receives files from clients, and saves them to the specified filename.
+
 `Log(data)`: Logs the specified data for debugging purposes.
+
 `RunLog()`: Runs a continuous loop to process and print log messages.
+
 `RunServer(args)`: Sets up and runs the server-side functionality based on the provided command-line arguments.
+
 `RunClient(args)`: Sets up and runs the client-side functionality based on the provided command-line arguments.
+
 `JoinAll()`: Waits for all threads to finish execution before exiting.
+
 `main()`: Entry point of the script; parses command-line arguments and initiates server or client functionality accordingly.
 
 ## Functionality
 The code implements a DRTP/UDP file sender application capable of efficient and reliable file transmission over UDP (User Datagram Protocol) utilizing the Go-Back-N protocol. Key functionalities include:
+
 **Client-Server Communication:** Facilitates communication between client and server over UDP sockets, enabling file transfer.
+
 **Go-Back-N Protocol:** Implements the Go-Back-N protocol for reliable data transmission, ensuring ordered delivery of packets and handling packet loss.
+
 **File Transfer:** Enables the transfer of files between client and server, handling file segmentation, transmission, and reassembly at the destination.
+
 **Error Handling:** Implements robust error handling mechanisms to address potential issues such as socket timeouts, file not found errors, and network disruptions.
+
 **Concurrency:** Utilizes multithreading to support concurrent execution of tasks, enhancing performance and scalability.
 
 ## Exception Handling
 The code incorporates robust exception handling to gracefully manage potential errors and ensure smooth execution even in challenging scenarios. Key aspects of exception handling include:
-***Socket Timeout Handling***: Timely detection and handling of socket timeouts to prevent communication disruptions, ensuring reliable data transmission.
+*
+**Socket Timeout Handling***: Timely detection and handling of socket timeouts to prevent communication disruptions, ensuring reliable data transmission.
+
 ***File Not Found Handling***: Graceful handling of file not found errors, providing informative messages to users and preventing unexpected termination.
+
 ***Error Logging***: Comprehensive logging of errors and exceptions, enabling effective debugging and troubleshooting during application development and deployment.
+
 ***Connection Teardown***: Proper teardown of connections, including sending FIN packets and handling acknowledgments, to ensure orderly closure and release of resources.
+
 ***Thread Synchronization***: Synchronization of concurrent threads through locks to prevent race conditions and maintain data integrity in multi-threaded environments.
 
 ## Usage
@@ -81,6 +129,7 @@ The code incorporates robust exception handling to gracefully manage potential e
 To initiate file transmission from the client side, use the following command:  `python3 application.py -c -f <filename> -i <server_ip_address> -p <server_port>`
 Replace <filename> with the name of the file you wish to send, <server_ip_address> with the IP address of the server, and <server_port> with the port number the server is listening on.
 Example: `python3 application.py -c -f Photo.jpg -i 10.0.1.2 -p 8080`
+
 **Server** 
 To receive files on the server side, execute the following command: `python3 application.py -s -f <filename_to_save> -i <server_ip_address> -p <port>`
 Replace <filename_to_save> with the name to save the received file, <server_ip_address> with the IP address of the server, and <port> with the port number the server is listening on.
