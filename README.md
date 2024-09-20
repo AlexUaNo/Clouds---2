@@ -1,5 +1,5 @@
 # A file transfer application (DRTP/UDP protocol)
-##  Assignment in Networking and Cloud Computing
+## Networking and Cloud Computing
 
 ## Overview
 The objective is to develop and analyze a Python-based file transfer application enabling seamless data exchange between clients and servers using DRTP (Datagram Reliable Transfer Protocol) over UDP. The application operates by reading data in 994-byte chunks, appending a custom 6-byte DRTP header, and transmitting the data via UDP. File operations are conducted in binary mode (rb and wb), utilizing the struct package for header manipulation. Although the application supports concurrent transfer of two source files (multithreading), it restricts operations to allow only one transfer at a time.
